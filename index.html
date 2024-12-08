@@ -3,22 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>One Day of OC Transpo Analytics for Ward 17 </title>
+    <title>OC Transpo Analytics</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .hero {
+            height: 100vh;
+            background: url(background.gif) center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            background-blend-mode: overlay;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            margin: 0;
+        }
+        .hero p {
+            font-size: 1.5rem;
+            margin: 20px 0 0;
+        }
+        .sticky-menu {
+            position: sticky;
+            top: 0;
+            background-color: #004c99;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        .sticky-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .sticky-menu a:hover {
+            text-decoration: underline;
+        }
+        section {
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-sizing: border-box;
+        }
+        .text-block {
+            flex: 1;
+            max-width: 30%;
+        }
+        .visualization {
+            flex: 2;
+            max-width: 70%;
+        }
+        .tableauPlaceholder {
+            width: 100%;
+            height: 80vh;
+        }
+        .reverse {
+            flex-direction: row-reverse;
+        }
+
+    a {
+        text-decoration: none;
+        font-size: 16px;
+        color: white;
+        background-color: #004c99;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: inline-block;
+        margin: 5px;
+    }
+    a:hover {
+        background-color: #003366;
+    }
+
+    </style>
 </head>
 <body>
-    <center>
-    <h1>On-Time Performance for Routes 2, 6, 7, and 10 in Ward 17, collected over a single day from 5AM - 8PM</h1>
-    <pre>
-        Quick Definitions:
-        Early: more than 1 minute early
-        On-Time: between 1 minute early and 5 minutes late
-        Late: between 5 and 10 minutes late
-        Extremely Early: greater than 10 minutes late
-    </pre>
-    </center>
-    <!-- Embed Worksheet 1 -->
-    <div class='tableauPlaceholder' id='viz1733522203928' style='position: relative'><noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;OC&#47;OCTranspoAnalytics-Ward17&#47;ROUTEON-TIMEPERFORMANCE&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='OCTranspoAnalytics-Ward17&#47;ROUTEON-TIMEPERFORMANCE' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;OC&#47;OCTranspoAnalytics-Ward17&#47;ROUTEON-TIMEPERFORMANCE&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-GB' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1733522203928');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+    <!-- Hero Section -->
+    <header class="hero" style="background-image: url(background.gif)">
+        <h1>Bus On-Time Performance in Capital Ward</h1>
+        <p>Unveiling one day's worth of performance metrics for bus routes 2, 6, 7, and 10 .</p>
+    </header>
 
+    <!-- Sticky Menu -->
+    <nav class="sticky-menu">
+        <a href="#overall-performance">OVERALL PERFORMANCE</a>
+        <a href="#performance-by-hour">PERFORMANCE BY HOUR</a>
+        <a href="#wait-times">WAIT TIMES ACROSS ROUTES</a>
+        <a href="#map">MAP</a>
+        <a href="#data">DATASET AND BACKGROUND</a>
+    </nav>
+    <!-- Sections -->
+    <h1 style="padding: 40px 40px; padding-bottom: 30px;">
+        The focus of my story is Ward 17, also known as Capital Ward. 
+        I live in this ward, and when we were tasked with creating a data story about our wards,
+        I knew right away this was the topic I wanted to cover. 
+        A few facts about the ward: Shawn Menard is the Councillor of the ward, it is the oldest currently existing ward in Ottawa, 
+        it is located near Downtown Ottawa, and it is home to Carleton University.
+
+
+       Things to note: This is one day's worth of data. Some data is absent, such as trip cancellations.
+       This data was retrieved from the GTFS-RT test feed.
+       "Early" refers to a bus that arrives 1 minute or more early. 
+       "On-time" refers to a bus that arrives between 1 minute early to 5 minutes late. 
+       "Late" refers to a bus that arrives more than 5 minutes late. 
+       Early, On-Time, and Late are taken from OC Transpo's definitions of the terms. 
+       I added a new category, "Extremely Late", which refers to buses that arrive more than 10 minutes late.
+       I did so because when I was going through the data, many bus arrivals were >10 minutes late, which are significant wait times for riders.
+       This information is localised to Ward 17 (Capital Ward). On-Time Performance for the entirety of the route is much worse. Vehicles refer to
+       the actual machinery. Vehicle =/= Driver. Feel free to hover on the visualizations to get more detail, including seeing samples of the data!
+        If you want to see samples of the data, look at the gif below to see how.
+    </h1>
+    <center>
+        <img  style="padding-bottom: 250px;" src="igif.gif" alt="gif showing how to see data fields using tableau"/>
+    </center>
+
+    <section id="overall-performance" style="padding-left: 40px;">
+        <div class="text-block" style="padding-top: 400px; padding-right: 50px;">
+            <h2 style="font-size: 1.5em;">Overall Performance</h2>
+            <p style="padding: 5px"></p>
+            <p>Here we have three visualizations: Route On-Time Performance, Vehicle On-Time Performance, and Stop On-Time Performance. Routes go in two directions.</p>
+            <p style="padding: 5px"></p>
+            <p>Route On-Time Performance shows the proportion of trips along the route that are early, on-time, late, or extremely late.</p>
+            <p>Vehicle On-Time Performance shows the proportion of vehicles that are early, on-time, late, or extremely late to all the stops they visit for all the trips that they take. </p>
+            <p>Stop On-Time Performance shows the proportion of buses that arrive to a particular stop  on-time, late, or extremely late. </p>
+            <p>The route that had the most on time bus arrivals was Route 2 going in Direction 1, with an approximately 98% on-time arrival performace, and no extremely late bus arrivals.</p>
+            <p style="padding: 5px"></p>
+            <p>The route with the least worst on time performance was Route 7 going in Direction 1, 
+               with an on-time arrival rate of approximately 43%, less than half of the time. This route was also characterised by frequent early bus arrivals.
+               Having taken this route myself, and talking with others that have, I had always assumed that the buses were late, and whilst it 
+               does have the highest frequency of late bus arrivals out of all the routes, 
+               I suspect that my anecdotal experiences of "late" buses on that route may 
+               be due to actually missing my first bus because it came too early and 
+               the bus I perceive as "late" is actually the next bus arriving on time. 
+            </p>
+            <p style="padding: 5px"></p>
+            <p> The vehicle data measures the frequency of early, on-time, late, or extremely late arrivals of a bus over all the stops it visit across all trips.
+                Many vehicles made only one trip, so some of this data represents multiple stops over a single trip, whilst
+                others cover multiple stops over multiple trips.
+                It seems vehicles are assigned to a specific route, e.g. Vehicle 1 does 10 trips on Route 5.
+                Some vehicles were consistently on time over mutiple trips, such as vehicle 6549. 
+                The consistently late vehicles only took one trip, so it's difficult to say.
+                Perhaps they were even assigned fewer trips because they are older, less efficient buses? 
+                Or maybe the buses are assigned trips at times of day that make it unlikely to be on-time, such as rush hour.
+                Something interesting to see is the patterns in lateness. 
+                Rarely do individual buses arrive late, early, on-time, and extremely late reguarly.
+                Some arrive on-time and early, but never late. Others arrive on-time and late, but never early.
+                Could these fluctations be due to the routes they are assigned, or something with the machinery (older bus, smaller buses, route that bus is assigned?)
+                More data would get us closer to answering this question.
+            </p>
+            <p style="padding: 5px"></p>
+            <p>
+                The stops data tracks all late arrivals at that particular stop.
+                For example, if a bus stop is along routes 2 and 10, then this data tracks every bus that stopped there 
+                that service routes 2 and 10, for all directions.
+                If your stop is SUNNYSIDE / GROSVENOR, good luck!
+            </p>
+        </div>
+        </div>
+        <div class="visualization">
+            <div class='tableauPlaceholder' id='vizOverallPerformance'>
+                <div class='tableauPlaceholder' id='viz1733624719326' style='position: relative'><noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;ST&#47;STOPPERFORMANCE&#47;STOP_PERFORMANCE&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='STOPPERFORMANCE&#47;STOP_PERFORMANCE' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;ST&#47;STOPPERFORMANCE&#47;STOP_PERFORMANCE&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-GB' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1733624719326');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+            </div>
+        </div>
+    </section>
+    <p style="padding: 120px 20px; padding-bottom: 550px;" ></p>
+
+    <section id="performance-by-hour" class="reverse" style="padding-right: 40px;">
+        <div class="text-block" style="padding-top: 500px; padding-left: 50px;">
+            <h2 style="font-size: 1.5em">Performance by Hour</h2>
+            <p style="padding: 5px"></p>
+            <p>
+                The following visualizations show how on-time performance is affected by time from 5AM-8PM.
+                If we look at the General Performance visualization, we see that on this day,
+                most buses across routes arrived to their stops on time. However, from 5PM to 8PM, 
+                we that a large percentage of buses arrive not just late, but extremely late. 
+                Slightly more than 1 in 5 buses from 7PM - 8PM arrived more than 10 minutes late!
+            </p>
+            <p style="padding: 5px"></p>
+            <p>
+                Route 2 consistently has high on-time arrivals.
+                there are several time periods when the buses arrive on-time 100% of the time. 
+                From 7AM - 11 AM, buses on Route 2 arrived early 100% of the time!
+                At 12PM, this route is a little more than 30%, but those lates were all less than 10 minutes. However from 4PM onwards, increasingly large
+                percentages of arrivals on this route are over 10 minutes late.
+            </p>
+            <p style="padding: 5px"></p>
+            <p>
+                For route 6, on time performance fluctates quite a bit, but consistently showed more than half of arrivals on time.
+                Some time periods have on-time arrivals at approximately 100%, 95%, and 93%.
+                Other periods show on-time percentages of 61%.
+                Again, in the evenings lateness increases significantly, with arrivals over 10 minutes late comprising a little under 1 in 4 buses.
+            </p>
+            <p style="padding: 5px"></p>
+            <p>
+                Out of all the routes, route 7 shows the lowest on-time arrival percentages.
+                From 7AM - 9AM, bus on-time performance is around 50%.
+                At 7AM, slightly more than 33% of buses are late, some of them being 9 minutes late.
+                At 8AM, aprroximaelty 28% of bus arrivals are extremely late. That is,
+                a little under 1 out of 3 buses will arrive over 10 minutes late. 
+                If you click on the visualization to look at the data, some of these buses can reach up to 16 minutes late!
+                A large portion of buses not arriving on time are early, especially at 10-11AM, 1PM-2PM, and 5PM-6PM.
+                In some instances, the buses arrive 20 minutes ahead of the scheduled time!
+                I find this a bit difficult to believe, and I can accept there were some flaws in my methodology,
+                so I will try and review my code to see if there were any errors on my end, and try to collect more data over time,
+                as this is only one day's worth. However, if it is true, it would seem that many "late" arrivals or "no-shows"
+                are actually the result of extremely early buses being misterpreted as late or cancelled by riders.
+                There are windows where on-time performance is 100%, specifically from 2PM-5PM.
+            </p>
+            <p style="padding: 5px"></p>
+            <p>
+                Route 10 generally showed high on-time performance, with multiple periods of the day showing 100% on-time arrivals.
+                However, from 4PM onwards, we see steady increases in extremely late buses. 
+                At 7-8PM, it's almost a coin flip as to whether you'll receive a bus that comes more than 10 minutes late,
+                or a bus that comes on time. From 5PM onwards, 1/3 - 1/2 of all buses on route 10 are late, 
+                many by times over 10 minutes.
+            </p>
+        </div>
+        <div class="visualization">
+            <div class='tableauPlaceholder' id='vizPerformanceByHour'>
+                <div class='tableauPlaceholder' id='viz1733624756056' style='position: relative'><noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;RO&#47;ROUTE10PERFORMANCE&#47;ROUTE_10_PERFORMANCE&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='ROUTE10PERFORMANCE&#47;ROUTE_10_PERFORMANCE' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;RO&#47;ROUTE10PERFORMANCE&#47;ROUTE_10_PERFORMANCE&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-GB' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1733624756056');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+            </div>
+        </div>
+    </section>
+
+    <p style="padding: 40px 20px; padding-bottom: 550px;" ></p>
+
+    <section id="wait-times"  style="padding-left: 40px;">
+        <div class="text-block" style="padding-right: 50px;">
+            <h2 style="font-size: 1.5em;">Wait Times Across Routes</h2>
+            <p style="padding: 5px"></p>
+            <p>As there were many extremes in the data, I hesitated to describe this data by the mean. Instead, the data is displayed using a box plot. These times are given in seconds. </p>
+            <p style="padding: 5px"></p>
+            <p>
+                Focusing on outliers:
+            <p>
+                <p style="padding: 5px"></p>
+            </p>
+            <p>On route 2, the most extreme late time was 639 seconds (roughly 10 and a half minutes).</p>
+            <p>On route 6, the most extreme late time was 1806 seconds (30 minutes), and the most extreme early arrival was 832 seconds (almost 14 minutes).</p>
+            <p>On route 7, the most extreme late time was 964 seconds (16 minutes), and the most extreme early arrival was 1236 seconds (roughly 20 minutes).</p>    
+            <p>On route 10, the most extreme late time was 1018 seconds (almost 17 minutes).</p>
+            </p>
+        </div>
+        <div class="visualization" style="padding-top: 200px;">
+            <div class='tableauPlaceholder' id='vizWaitTimes'>
+                <div class='tableauPlaceholder' id='viz1733624775656' style='position: relative'><noscript><a href='#'><img alt='WAIT TIMES ACROSS ROUTES IN SECONDS ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;WA&#47;WAITTIMESACROSSROUTES&#47;ROUTEWAITTIMES&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='WAITTIMESACROSSROUTES&#47;ROUTEWAITTIMES' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;WA&#47;WAITTIMESACROSSROUTES&#47;ROUTEWAITTIMES&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-GB' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1733624775656');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+            </div>
+        </div>
+    </section>
+
+    <p style="padding: 20px 20px; padding-bottom: 300px;" ></p>
+
+    <section id="map" class="reverse">  
+        <div class="text-block"  style="padding-right: 40px;  padding-left: 40px;">
+            <h2 style="font-size: 1.5em;">Performance Map</h2>
+            <p style="padding: 5px"></p>
+            <p>A map showing buses arriving at stops in Ward 17 serviced by routes 2, 6, 7, and 10 over the day by hour (24 hour clock). 
+                Use the slider to see their arrival status over time. 
+            </p>
+        </div>
+        <div class="visualization">
+            <div class='tableauPlaceholder' id='vizMap'>
+                <div class='tableauPlaceholder' id='viz1733624791456' style='position: relative'><noscript><a href='#'><img alt='PUNCTUALITY OVER TIME - 5 December 2024 at 05 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;MA&#47;MAP_17335212091780&#47;Sheet10&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='MAP_17335212091780&#47;Sheet10' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;MA&#47;MAP_17335212091780&#47;Sheet10&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-GB' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1733624791456');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+            </div>
+        </div>
+    </section>
+
+        <div id = "data" class="text-block;" style="text-align: center; padding: 250px 300px; padding-bottom: 100px;" >
+            <h2 style="font-size: 1.5em;">Dataset & Background</h2>
+            <p style="padding: 5px"></p>
+            <p>Below is a link to a GitHub repository containing a zip file with a README and the database tables in .csv format. There is a README that explains everything.</p>
+            <a href="https://github.com/malikahbain/oc_transpo_analytics/blob/main/Database%20Files%20Updated.zip" target="_blank" download>Database Tables - CSV</a>
+            <p style="padding: 5px"></p>
+            <h2 style="font-size: 1.20em;">How did I do it?</h2>
+            <p style="padding: 5px"></p>
+            <p>I used the OC Transpo GTFS-RT Beta Feed to retrieve the real time information.
+                Retrieved the information from the API for the entirety of Routes 2, 6, 7, and 10 using a server I created.
+                Created a database and hosted it using Supabase.
+                Sent the the information I retrieved to my database.
+                Used a shapefile I found of Ward 17 on Open Ottawa to get the spatial information.
+                Converted that information to a spatial database using QGIS.
+                Used a query to filter for the information that fell within the boundaries of the shapefile (Ward 17).
+                Used the filtered data to create visualizations in Tableau. 
+                Finally, Embedded them into this website!
+            </p>
+            <p style="padding: 5px"></p>
+            <a href="https://www.octranspo.com/en/news/article/new-real-time-data-test-feed-available-now/" target="_blank" download>OC Transpo GTFS-RT Beta Feed</a>
+            <a href="https://open.ottawa.ca/datasets/ottawa::wards-2022-2026" target="_blank" download>Open Ottawa Ward Shapefiles</a>
+        </div>
 
 </body>
-</html>     
+</html>
